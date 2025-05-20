@@ -20,7 +20,8 @@ WORKDIR /app
 
 # Copiem tot el codi a /app
 COPY . .
-
+# Aquí posem un echo per debug en build
+RUN echo "Fem el build"
 # Instal·lem les dependències PHP i Node i compilem assets
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
@@ -28,10 +29,12 @@ RUN npm run build
 
 # Fem la migració de base de dades aquí, només si tens base de dades disponible en build (normalment no)
 # Si no, fes-la a runtime en start (recomanat no fer migracions a build)
+# Aquí posem un echo per debug en build
+RUN echo "Imatge Docker construïda correctament"
 
 # Exposem port que Render pot usar. Render assigna el port via variable d'entorn $PORT,
 # però per exposar el port podem posar un genèric, per exemple 8000
 EXPOSE 8000
 
 # Start command que agafi el port de Render (a runtime)
-CMD CMD ["./start.sh"]
+CMD ["./start.sh"]
