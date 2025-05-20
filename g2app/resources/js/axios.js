@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const baseURL = (import.meta.env.VITE_API_URL || 'https://localhost:8000') + '/api';
-
-axios.defaults.baseURL = baseURL;
-axios.defaults.withCredentials = true;  // si fas servir sessions/cookies
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'https://mp13-g2-tabletap.onrender.com';  // HTTPS
+axios.defaults.withCredentials = true;  // Per enviar cookies en les peticions
 
 export default axios;
