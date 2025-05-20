@@ -14,7 +14,7 @@ const form = useForm({
 
 const submit = () => {
     isLoading.value = true;
-    form.post("/login", {
+    form.post("api/login", {
         onFinish: () => {
             form.reset("password");
             isLoading.value = false;

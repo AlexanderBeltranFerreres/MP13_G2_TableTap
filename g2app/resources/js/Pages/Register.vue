@@ -16,7 +16,7 @@ const form = useForm({
 
 const submit = () => {
     isLoading.value = true;
-    form.post("/register", {
+    form.post("/api/register", {
         onFinish: () => {
             form.reset("password", "password_confirmation");
             isLoading.value = false;
