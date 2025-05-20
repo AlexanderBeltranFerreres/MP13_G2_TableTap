@@ -32,7 +32,7 @@ RUN npm run build
 
 # Exposem port que Render pot usar. Render assigna el port via variable d'entorn $PORT,
 # però per exposar el port podem posar un genèric, per exemple 8000
-EXPOSE 8000
+EXPOSE 10000
 
 # Start command que agafi el port de Render (a runtime)
 CMD ["./start.sh"]
