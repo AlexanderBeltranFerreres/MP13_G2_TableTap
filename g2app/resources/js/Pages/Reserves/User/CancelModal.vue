@@ -44,7 +44,7 @@
 import { defineProps, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { Modal } from '@inertiaui/modal-vue';
-import { route } from 'vue-router'; // Import the route function
+import { route } from 'ziggy-js'; // Import the route function
 
 const props = defineProps({
     reservaId: {
