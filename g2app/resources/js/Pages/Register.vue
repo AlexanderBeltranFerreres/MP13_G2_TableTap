@@ -1,7 +1,10 @@
 <script setup>
+import axios from 'axios';               // <-- Importa axios
 import { useForm } from "@inertiajs/vue3";
 import Layout from "@/Layouts/Layout.vue";
 import { ref } from "vue";
+
+axios.defaults.withCredentials = true;  // <-- Assegura enviar cookies
 
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
@@ -14,9 +17,9 @@ const form = useForm({
     empresa: false,
 });
 
-const submit = async() => {
+const submit = async () => {
     isLoading.value = true;
-    await axios.get("/sanctum/csrf-cookie")
+    await axios.get("/sanctum/csrf-cookie");  // <-- Esperar el CSRF cookie
     form.post("/register", {
         onFinish: () => {
             form.reset("password", "password_confirmation");
