@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use App\Models\Plat;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,7 +12,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
+        DB::table('provincias')->delete();
+        DB::table('municipios')->delete();
         $this->call([
             UserSeeder::class,
             MunicipiProvinciaSeeder::class,
