@@ -14,8 +14,9 @@ const form = useForm({
     empresa: false,
 });
 
-const submit = () => {
+const submit = async() => {
     isLoading.value = true;
+    await axios.get("/sanctum/csrf-cookie")
     form.post("/register", {
         onFinish: () => {
             form.reset("password", "password_confirmation");

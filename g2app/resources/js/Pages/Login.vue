@@ -12,8 +12,9 @@ const form = useForm({
     password: "password",
 });
 
-const submit = () => {
+const submit = async() => {
     isLoading.value = true;
+    await axios.get("/sanctum/csrf-cookie");
     form.post("/login", {
         onFinish: () => {
             form.reset("password");
