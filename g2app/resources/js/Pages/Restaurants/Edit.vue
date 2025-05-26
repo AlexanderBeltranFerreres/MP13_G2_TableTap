@@ -1,192 +1,185 @@
 <template>
-    <layout>
-        <div class="edit-restaurant-page">
-            <div class="edit-container">
-                <div class="page-header">
-                    <div class="header-content">
-                        <Link :href="route('restaurants.show', { id: restaurant.id })" class="back-button">
-                            <span class="back-icon">←</span>
-                            <span>Tornar al Restaurant</span>
-                        </Link>
-                        <h1 class="page-title">Editar Restaurant</h1>
-                        <p class="page-subtitle">Actualitza la informació del teu restaurant</p>
+
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Editar Restaurant</h1>
+            <p class="page-subtitle">Actualitza la informació del teu restaurant</p>
+        </div>
+        <div class="restaurant-preview">
+            <img :src="`/storage/${restaurant.profile_image}`" alt="Restaurant" class="restaurant-image" />
+        </div>
+    </div>
+
+    <form @submit.prevent="submitAdminForm" class="edit-form">
+        <div class="form-sections">
+            <!-- Sección de información básica -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📋</span>
+                    Informació Bàsica
+                </h2>
+
+                <div class="form-group">
+                    <label for="nom" class="form-label">Nom del Restaurant</label>
+                    <input
+                        v-model="form.nom"
+                        id="nom"
+                        type="text"
+                        class="form-input"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcio" class="form-label">Descripció</label>
+                    <textarea
+                        v-model="form.descripcio"
+                        id="descripcio"
+                        class="form-textarea"
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefon" class="form-label">Telèfon de Contacte</label>
+                    <input
+                        v-model="form.telefon"
+                        id="telefon"
+                        type="text"
+                        class="form-input"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="tipus_cuina" class="form-label">Tipus de Cuina</label>
+                    <select
+                        v-model="form.tipus_cuina"
+                        id="tipus_cuina"
+                        class="form-select"
+                        required
+                    >
+                        <option v-for="option in tipusCuinaOptions" :key="option" :value="option">
+                            {{ option }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sección de ubicación -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📍</span>
+                    Ubicació
+                </h2>
+
+                <div class="form-group">
+                    <label for="provincia" class="form-label">Província</label>
+                    <select
+                        v-model="selectedProvinciaId"
+                        @change="fetchMunicipios"
+                        id="provincia"
+                        class="form-select"
+                        required
+                    >
+                        <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">
+                            {{ provincia.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group" v-if="municipios.length > 0">
+                    <label for="municipi" class="form-label">Municipi</label>
+                    <select
+                        v-model="form.municipio_id"
+                        id="municipi"
+                        class="form-select"
+                        required
+                    >
+                        <option value="" disabled>Selecciona un municipi</option>
+                        <option v-for="municipio in municipios" :key="municipio.id" :value="municipio.id">
+                            {{ municipio.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="carrer" class="form-label">Adreça</label>
+                    <input
+                        v-model="form.carrer"
+                        id="carrer"
+                        type="text"
+                        class="form-input"
+                        required
+                    />
+                </div>
+            </div>
+
+            <!-- Sección de horarios e imagen -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🕒</span>
+                    Horaris i Imatge
+                </h2>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="hora_obertura" class="form-label">Hora Obertura</label>
+                        <input
+                            v-model="form.hora_obertura"
+                            id="hora_obertura"
+                            type="time"
+                            class="form-input"
+                            required
+                        />
                     </div>
-                    <div class="restaurant-preview">
-                        <img :src="`/storage/${restaurant.profile_image}`" alt="Restaurant" class="restaurant-image" />
+
+                    <div class="form-group half">
+                        <label for="hora_tancament" class="form-label">Hora Tancament</label>
+                        <input
+                            v-model="form.hora_tancament"
+                            id="hora_tancament"
+                            type="time"
+                            class="form-input"
+                            required
+                        />
                     </div>
                 </div>
 
-                <form @submit.prevent="submitAdminForm" class="edit-form">
-                    <div class="form-sections">
-                        <!-- Sección de información básica -->
-                        <div class="form-section">
-                            <h2 class="section-title">
-                                <span class="section-icon">📋</span>
-                                Informació Bàsica
-                            </h2>
-
-                            <div class="form-group">
-                                <label for="nom" class="form-label">Nom del Restaurant</label>
-                                <input
-                                    v-model="form.nom"
-                                    id="nom"
-                                    type="text"
-                                    class="form-input"
-                                    required
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="descripcio" class="form-label">Descripció</label>
-                                <textarea
-                                    v-model="form.descripcio"
-                                    id="descripcio"
-                                    class="form-textarea"
-                                    required
-                                ></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="telefon" class="form-label">Telèfon de Contacte</label>
-                                <input
-                                    v-model="form.telefon"
-                                    id="telefon"
-                                    type="text"
-                                    class="form-input"
-                                    required
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="tipus_cuina" class="form-label">Tipus de Cuina</label>
-                                <select
-                                    v-model="form.tipus_cuina"
-                                    id="tipus_cuina"
-                                    class="form-select"
-                                    required
-                                >
-                                    <option v-for="option in tipusCuinaOptions" :key="option" :value="option">
-                                        {{ option }}
-                                    </option>
-                                </select>
-                            </div>
+                <div class="form-group">
+                    <label for="profile_image" class="form-label">Canviar Imatge Principal</label>
+                    <div class="file-upload-container">
+                        <input
+                            id="profile_image"
+                            type="file"
+                            class="file-input"
+                            @change="HandleFileUpload"
+                        />
+                        <div class="file-upload-button">
+                            <span class="upload-icon">📷</span>
+                            <span>Selecciona una nova imatge</span>
                         </div>
-
-                        <!-- Sección de ubicación -->
-                        <div class="form-section">
-                            <h2 class="section-title">
-                                <span class="section-icon">📍</span>
-                                Ubicació
-                            </h2>
-
-                            <div class="form-group">
-                                <label for="provincia" class="form-label">Província</label>
-                                <select
-                                    v-model="selectedProvinciaId"
-                                    @change="fetchMunicipios"
-                                    id="provincia"
-                                    class="form-select"
-                                    required
-                                >
-                                    <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">
-                                        {{ provincia.name }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group" v-if="municipios.length > 0">
-                                <label for="municipi" class="form-label">Municipi</label>
-                                <select
-                                    v-model="form.municipio_id"
-                                    id="municipi"
-                                    class="form-select"
-                                    required
-                                >
-                                    <option value="" disabled>Selecciona un municipi</option>
-                                    <option v-for="municipio in municipios" :key="municipio.id" :value="municipio.id">
-                                        {{ municipio.name }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="carrer" class="form-label">Adreça</label>
-                                <input
-                                    v-model="form.carrer"
-                                    id="carrer"
-                                    type="text"
-                                    class="form-input"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <!-- Sección de horarios e imagen -->
-                        <div class="form-section">
-                            <h2 class="section-title">
-                                <span class="section-icon">🕒</span>
-                                Horaris i Imatge
-                            </h2>
-
-                            <div class="form-row">
-                                <div class="form-group half">
-                                    <label for="hora_obertura" class="form-label">Hora d'Obertura</label>
-                                    <input
-                                        v-model="form.hora_obertura"
-                                        id="hora_obertura"
-                                        type="time"
-                                        class="form-input"
-                                        required
-                                    />
-                                </div>
-
-                                <div class="form-group half">
-                                    <label for="hora_tancament" class="form-label">Hora de Tancament</label>
-                                    <input
-                                        v-model="form.hora_tancament"
-                                        id="hora_tancament"
-                                        type="time"
-                                        class="form-input"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="profile_image" class="form-label">Canviar Imatge Principal</label>
-                                <div class="file-upload-container">
-                                    <input
-                                        id="profile_image"
-                                        type="file"
-                                        class="file-input"
-                                        @change="HandleFileUpload"
-                                    />
-                                    <div class="file-upload-button">
-                                        <span class="upload-icon">📷</span>
-                                        <span>Selecciona una nova imatge</span>
-                                    </div>
-                                    <span v-if="form.profile_image && typeof form.profile_image !== 'string'" class="file-name">
+                        <span v-if="form.profile_image && typeof form.profile_image !== 'string'" class="file-name">
                                         {{ form.profile_image.name }}
                                     </span>
-                                </div>
-                                <p class="form-hint">Deixa en blanc per mantenir la imatge actual</p>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="form-actions">
-                        <Link :href="route('restaurants.show', { id: restaurant.id })" class="cancel-button">
-                            Cancel·lar
-                        </Link>
-                        <button type="submit" class="submit-button" :disabled="isSubmitting">
-                            <span v-if="isSubmitting" class="loading-spinner"></span>
-                            <span v-else>Guardar Canvis</span>
-                        </button>
-                    </div>
-                </form>
+                    <p class="form-hint">Deixa en blanc per mantenir la imatge actual</p>
+                </div>
             </div>
         </div>
-    </layout>
+
+        <div class="form-actions">
+            <Link :href="route('restaurants.show', { id: restaurant.id })" class="cancel-button">
+                Cancel·lar
+            </Link>
+            <button type="submit" class="submit-button" :disabled="isSubmitting">
+                <span v-if="isSubmitting" class="loading-spinner"></span>
+                <span v-else>Guardar Canvis</span>
+            </button>
+        </div>
+    </form>
+
+
 </template>
 
 <script setup>
@@ -195,7 +188,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { route } from 'ziggy-js';
 import axios from 'axios';
 import Layout from '@/Layouts/Layout.vue';
-import { Link, useForm } from "@inertiajs/vue3";
+import {Link, useForm} from "@inertiajs/vue3";
 
 const props = defineProps({
     restaurant: Object,
@@ -244,10 +237,10 @@ const submitAdminForm = () => {
             formData.append(key, data[key] === null ? '' : data[key]);
         }
         return formData;
-    }).post(route('restaurants.update', { restaurant: props.restaurant.id }), {
+    }).post(route('restaurants.update', {restaurant: props.restaurant.id}), {
         onSuccess: () => {
             isSubmitting.value = false;
-            Inertia.visit(route('restaurants.show', { id: props.restaurant.id }));
+            Inertia.reload(); // Reload the current page
         },
         onError: (errors) => {
             isSubmitting.value = false;
@@ -280,7 +273,7 @@ onMounted(() => {
 .page-header {
     background: linear-gradient(135deg, #FF5A5F, #FF8A8E);
     color: white;
-    padding: 40px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -511,7 +504,9 @@ onMounted(() => {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @media (max-width: 768px) {

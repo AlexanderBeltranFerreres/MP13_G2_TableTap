@@ -2,11 +2,15 @@
     <layout>
         <div class="restaurant-detail-page">
             <!-- Hero Section -->
-            <div class="restaurant-hero" :style="{ backgroundImage: `url(/storage/${restaurant.profile_image})` }">
+            <div class="relative w-full h-[50vh] min-h-[400px] bg-gray-200 bg-cover bg-center"
+                 :style="{ backgroundImage: `url(/storage/${restaurant.profile_image})` }">
                 <div class="hero-overlay">
                     <div class="container">
                         <div class="hero-content">
-                            <h1 class="restaurant-name">{{ nom }}</h1>
+                            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-white drop-shadow-md">
+                                {{ nom }}
+                            </h1>
+
                             <div class="restaurant-meta">
                                 <div class="meta-item">
                                     <span class="meta-icon">🍽️</span>
@@ -21,8 +25,9 @@
                                     4.8 (124 valoracions)
                                 </div>
                             </div>
-                            <button @click="toggleFavorite" class="favorite-button" :class="{ 'is-favorite': isFavorite }">
-                                <span class="favorite-icon">{{ isFavorite ? '❤️' : '🤍' }}</span>
+                            <button @click="toggleFavorite"
+                                    class="inline-flex items-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-full transition shadow-md hover:shadow-lg">
+                                <span class="mr-2 text-xl">{{ isFavorite ? '❤️' : '🤍' }}</span>
                             </button>
                             <br>
                             <br>
@@ -244,12 +249,6 @@
                             </div>
                         </div>
 
-                        <div class="restaurant-map">
-                            <div class="map-placeholder">
-                                <div class="map-icon">📍</div>
-                                <div class="map-text">Mapa de localització</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -258,10 +257,10 @@
 </template>
 
 <script setup>
-import { defineProps, reactive, ref, onMounted, computed } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
-import { Inertia } from '@inertiajs/inertia';
-import { route } from 'ziggy-js';
+import {defineProps, reactive, ref, onMounted, computed} from 'vue';
+import {Link, usePage} from '@inertiajs/vue3';
+import {Inertia} from '@inertiajs/inertia';
+import {route} from 'ziggy-js';
 import axios from 'axios';
 import Layout from "@/Layouts/Layout.vue";
 
@@ -271,9 +270,10 @@ const props = defineProps({
 });
 
 // Extracción de datos del restaurante
-const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
+const {nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament} = props.restaurant;
 const horaObertura = hora_obertura;
 const horaTancament = hora_tancament;
+
 
 // Inicialización de variables reactivas
 const page = usePage();
@@ -308,7 +308,7 @@ const today = computed(() => {
 // Comprobar si el restaurante está en favoritos
 const checkIfFavorite = async () => {
     try {
-        const response = await axios.get(route('restaurants.isFavorite', { restaurant: props.restaurant.id }));
+        const response = await axios.get(route('restaurants.isFavorite', {restaurant: props.restaurant.id}));
         isFavorite.value = response.data.isFavorite;
     } catch (error) {
         console.error('Error checking favorite status:', error);
@@ -318,7 +318,7 @@ const checkIfFavorite = async () => {
 // Añadir o quitar de favoritos
 const toggleFavorite = async () => {
     try {
-        const response = await axios.post(route('restaurants.favorite', { restaurant: props.restaurant.id }));
+        const response = await axios.post(route('restaurants.favorite', {restaurant: props.restaurant.id}));
         isFavorite.value = response.data.isFavorite;
     } catch (error) {
         console.error('Error toggling favorite:', error);
@@ -823,7 +823,9 @@ onMounted(() => {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .success-message {
