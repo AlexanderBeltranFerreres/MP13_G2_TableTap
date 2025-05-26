@@ -142,18 +142,21 @@
                                         <span v-else>-</span>
                                     </td>
                                     <td class="actions-cell">
-                                        <div class="table-actions">
-                                            <ModalLink :href="route('reserves.edit', { id: reserva.id })">
-                                                <button class="action-button edit-button" @click.stop>
-                                                    <span class="action-icon">✏️</span>
-                                                </button>
-                                            </ModalLink>
-                                            <ModalLink :href="route('reserves.delete', { id: reserva.id })">
-                                                <button class="action-button delete-button" @click.stop>
-                                                    <span class="action-icon">🗑️</span>
-                                                </button>
-                                            </ModalLink>
-                                        </div>
+                                        <ModalLink
+                                            :href="route('reserves.edit', { id: reserva.id })"
+                                            class="rounded-md hover:bg-blue-200 py-2 px-1 mr-1"
+                                            @click.stop
+                                        >
+                                            <span class="action-icon">✏️</span>
+                                        </ModalLink>
+
+                                        <ModalLink
+                                            :href="route('reserves.delete', { id: reserva.id })"
+                                            class="rounded-md hover:bg-red-200 py-2 px-1"
+                                            @click.stop
+                                        >
+                                            <span class="action-icon">🗑️</span>
+                                        </ModalLink>
                                     </td>
                                 </tr>
                                 <tr v-if="expandedRowId === reserva.id" class="expanded-row">
