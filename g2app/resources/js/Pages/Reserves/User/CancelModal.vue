@@ -1,10 +1,6 @@
 <template>
-    <Modal v-slot="{ close }" max-width="xl" panel-classes="cancel-modal">
+    <Modal v-slot="{ close }" max-width="xl" panel-classes="bg-white rounded-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-icon">⚠️</div>
-                <h2 class="modal-title">Cancel·lar Reserva</h2>
-            </div>
 
             <div class="modal-body">
                 <p class="modal-message">
@@ -41,10 +37,10 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
-import { router } from '@inertiajs/vue3';
-import { Modal } from '@inertiaui/modal-vue';
-import { route } from 'ziggy-js'; // Import the route function
+import {defineProps, ref} from 'vue';
+import {router} from '@inertiajs/vue3';
+import {Modal} from '@inertiaui/modal-vue';
+import {route} from "ziggy-js"
 
 const props = defineProps({
     reservaId: {
@@ -58,7 +54,7 @@ const isSubmitting = ref(false);
 const cancelReserva = (close) => {
     isSubmitting.value = true;
 
-    router.post(route('user.reserves.cancelConfirm', { id: props.reservaId }), {}, {
+    router.post(route('user.reserves.cancelConfirm', {id: props.reservaId}), {}, {
         onSuccess: () => {
             close();
             router.reload();
@@ -91,7 +87,7 @@ const cancelReserva = (close) => {
 }
 
 .modal-icon {
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 15px;
 }
 
@@ -188,7 +184,9 @@ const cancelReserva = (close) => {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @media (max-width: 576px) {
